@@ -14,4 +14,10 @@ public class StockData {
     public String getTimestamp() {return timestamp;}
     public double getOpen() {return open;}
     public double getClose() {return close;}
+
+    @Override
+    public String toString() {
+        return String.format("Dates: %s | Open: %.2f | Close: %.2f", timestamp, open, close);
+    }
+
 }
