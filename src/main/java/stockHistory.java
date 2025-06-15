@@ -57,7 +57,7 @@ public class stockHistory {
             }
 
             // Sort from Most Recent
-            entries.sort(Comparator.comparing(StockData::getTimestamp).reversed());
+            entries.sort(Comparator.comparing(StockData::getTimestamp));
 
 
             // Print Entries
