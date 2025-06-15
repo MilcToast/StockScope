@@ -29,7 +29,7 @@ public class stockHistory {
             Gson gson = new Gson();
 
             HttpResponse<String> response = httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
-            gson.fromJson(response.body(), Data.class);
+            gson.fromJson(response.body(), StockData.class);
 
 
         } catch (Exception e) {
