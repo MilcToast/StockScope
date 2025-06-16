@@ -50,10 +50,9 @@ public class stockHistory {
                 String timestamp = entry.getKey();
                 JsonObject data = entry.getValue().getAsJsonObject();
 
-                double open = data.get("1. open").getAsDouble();
                 double close = data.get("4. close").getAsDouble();
 
-                entries.add(new StockData(timestamp, open, close));
+                entries.add(new StockData(timestamp, close));
             }
 
             // Sort from Most Recent

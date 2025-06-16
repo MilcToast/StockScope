@@ -15,11 +15,8 @@ public class StockAnalyzer {
         double alpha = 2.0/(period + 1);
 
         // Calculate Simple Average
-        for (StockData entry : entries) {
-            double open = entry.getOpen();
-            double close = entry.getClose();
+        for (int i = 0; i < entries.size(); i++) {
 
-            double percentChange = (close - open)/open * 100;
         }
 
         return ema;
