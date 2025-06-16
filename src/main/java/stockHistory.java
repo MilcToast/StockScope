@@ -12,13 +12,14 @@ import com.google.gson.*;
 public class stockHistory {
     public static void main(String[] args) {
 
-        int maxDays = 365;
+        int maxDays = 250;
 
         String apiKey = Secret.apiKey;
-        String symbol = "GOOG";
+        String symbol = "TSLA";
 
         String url ="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
                 + "&symbol=" + symbol
+                + "&outputsize=full"
                 + "&apikey=" + apiKey;
 
 
@@ -73,10 +74,6 @@ public class stockHistory {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
 
     }
 }
