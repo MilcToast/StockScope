@@ -12,12 +12,12 @@ import com.google.gson.*;
 public class stockHistory {
     public static void main(String[] args) {
 
-        int maxMonths = 12;
+        int maxDays = 365;
 
         String apiKey = Secret.apiKey;
         String symbol = "GOOG";
 
-        String url ="https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY"
+        String url ="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
                 + "&symbol=" + symbol
                 + "&apikey=" + apiKey;
 
@@ -37,7 +37,7 @@ public class stockHistory {
             HttpResponse<String> response = httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
             JsonObject root = gson.fromJson(response.body(), JsonObject.class);
 
-            JsonObject timeSeries = root.getAsJsonObject("Monthly Time Series");
+            JsonObject timeSeries = root.getAsJsonObject("Time Series (Daily)");
 
 
             // Data for Each Month
@@ -45,7 +45,7 @@ public class stockHistory {
 
             int count = 0;
             for(Map.Entry<String,JsonElement> entry : timeSeries.entrySet()) {
-                if (count++ >= maxMonths) break;
+                if (count++ >= maxDays) break;
 
                 String timestamp = entry.getKey();
                 JsonObject data = entry.getValue().getAsJsonObject();
@@ -64,9 +64,18 @@ public class stockHistory {
                 System.out.println(e);
             }
 
+            StockAnalyzer analyzer = new StockAnalyzer(entries);
+
+            int period = 20;
+            Double latestEMA = analyzer.calculateEMA(period);
+            System.out.printf("Latest %d-day EMA of returns: %.2f%%\n", period, latestEMA);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
 
 
     }
