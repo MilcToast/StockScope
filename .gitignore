@@ -11,7 +11,7 @@ target/
 *.iws
 *.iml
 *.ipr
-Secret.class
+Secret.java
 
 ### Eclipse ###
 .apt_generated
