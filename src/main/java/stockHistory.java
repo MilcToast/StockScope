@@ -12,10 +12,10 @@ import com.google.gson.*;
 public class stockHistory {
     public static void main(String[] args) {
 
-        int maxDays = 250;
+        int maxDays = 750;
 
         String apiKey = Secret.apiKey;
-        String symbol = "TSLA";
+        String symbol = "GOOG";
 
         String url ="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
                 + "&symbol=" + symbol
@@ -67,9 +67,19 @@ public class stockHistory {
 
             StockAnalyzer analyzer = new StockAnalyzer(entries);
 
-            int period = 20;
-            Double latestEMA = analyzer.calculateEMA(period);
-            System.out.printf("Latest %d-day EMA of returns: %.2f%%\n", period, latestEMA);
+            int periodFifty = 50;
+            Double fiftyEMA = analyzer.calculateEMA(periodFifty);
+            System.out.printf("Latest %d-day EMA of returns: %.2f%%\n", periodFifty, fiftyEMA);
+
+            int periodTwoHundred = 200;
+            Double twoHundredEMA = analyzer.calculateEMA(periodTwoHundred);
+            System.out.printf("Latest %d-day EMA of returns: %.2f%%\n", periodTwoHundred, twoHundredEMA);
+
+            double logFifty = analyzer.logEMA(periodFifty);
+            System.out.printf("Latest %d-day log EMA of returns: %.2f%%\n", periodFifty, logFifty);
+
+            double logTwoHundred = analyzer.logEMA(periodTwoHundred);
+            System.out.printf("Latest %d-day log EMA of returns: %.2f%%\n", periodTwoHundred, logTwoHundred);
 
         } catch (Exception e) {
             e.printStackTrace();
