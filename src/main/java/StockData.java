@@ -14,7 +14,7 @@ public class StockData {
 
     @Override
     public String toString() {
-        return String.format("Dates: %s | Open: %.2f | Close: %.2f", timestamp, close);
+        return String.format("Dates: %s | Close: %.2f", timestamp, close);
     }
 
 }
