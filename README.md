@@ -1,22 +1,28 @@
 # 📈 Stock Trend Analyzer
 
-A simple Java program that fetches historical stock data and calculates trend indicators like **Exponential Moving Average (EMA)** based on daily **log returns** or **percent changes**.
+A **Java-based program** that fetches and analyzes **historical stock data** using the **Alpha Vantage API**. Supports **multiple stock tickers**, calculates key **technical indicators**, and lays the groundwork for **portfolio-level analysis**.
 
 ---
 
 ## 🚀 Features
 
-- Fetches daily stock prices using the **Alpha Vantage API**
-- Computes **close-to-close percent returns** or **log returns**
-- Calculates the **latest EMA** over a user-defined period
-- Supports toggling between percent and log return analysis
-- Clean object-oriented structure for further extension
+- Fetches daily stock data using the **Alpha Vantage API**
+- Computes:
+    - Exponential Moving Average (EMA)
+    - Simple Moving Average (SMA)
+    - Percent & Log Returns
+    - Rolling Standard Deviation (volatility)
+- Supports **multi-stock input** in a single run
+- Clean object-oriented structure for further extension like:
+    - Weighted portfolio returns
+    - Covariance/Correlation analysis
+    - Sharpe ratio
 
 ---
 
 ## 📦 Technologies Used
 
-- Java 11+
+- Java 17+
 - `HttpClient` for API calls
 - `Gson` for JSON parsing
-- Alpha Vantage API (free tier)
+- **Alpha Vantage API** for stock market data
