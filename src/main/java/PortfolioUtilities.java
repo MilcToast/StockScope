@@ -10,9 +10,8 @@ public class PortfolioUtilities {
         for (int i = 0; i < n; i++) {
             sum += (returnsOne.get(i) - averageOne) * (returnsTwo.get(i) - averageTwo);
         }
-        double covariance = sum/(n-1);
 
-        return covariance;
+        return sum/(n-1);
     }
 
     public double computeCorrelation(List<Double> returnsOne, List<Double> returnsTwo) {
@@ -20,14 +19,13 @@ public class PortfolioUtilities {
         double stdevOne = computeStdev(returnsOne);
         double stdevTwo = computeStdev(returnsTwo);
 
-        double correlation = covariance / (stdevOne * stdevTwo);
-        return correlation;
+        return covariance / (stdevOne * stdevTwo);
     }
 
     public static double computeAverage (List<Double> list) {
         double sum = 0;
-        for (int i = 0; i < list.size(); i++) {
-            sum += list.get(i);
+        for (Double aDouble : list) {
+            sum += aDouble;
         }
         return sum/list.size();
     }
@@ -36,8 +34,8 @@ public class PortfolioUtilities {
         double mean = computeAverage(list);
         double sum = 0;
 
-        for (int i = 0; i < list.size(); i++) {
-            sum += Math.pow(list.get(i) - mean, 2);
+        for (Double aDouble : list) {
+            sum += Math.pow(aDouble - mean, 2);
         }
 
         return Math.sqrt(sum/(list.size() - 1));
