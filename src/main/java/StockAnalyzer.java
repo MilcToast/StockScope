@@ -2,10 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class StockAnalyzer {
     private final List<StockData> entries;
-
-    public StockAnalyzer(List<StockData> entries) {
-        this.entries = entries;
-    }
+    public StockAnalyzer(List<StockData> entries) {this.entries = entries;}
 
     // Calculate all the Percent Changes
     public List<Double> percentChanges () {
@@ -130,6 +127,5 @@ public class StockAnalyzer {
 
         return average;
     }
-
 
 }

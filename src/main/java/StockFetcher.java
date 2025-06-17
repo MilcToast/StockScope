@@ -28,8 +28,7 @@ public class StockFetcher {
 
             JsonObject timeSeries = root.getAsJsonObject("Time Series (Daily)");
 
-
-            // Data for Each Month
+            // Data for Each Day
             List<StockData> entries = new ArrayList<>();
 
             int count = 0;
