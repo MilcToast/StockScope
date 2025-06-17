@@ -23,7 +23,7 @@ public class StockAnalyzer {
     }
 
     // Calculate the Exponential Moving Average (EMA)
-    public Double calculateEMA(int period) {
+    public Double calcChangeEMA (int period) {
         List<Double> changes = percentChanges();
         if (changes.size() == 0) return null;
 
@@ -62,7 +62,7 @@ public class StockAnalyzer {
         return logChanges;
     }
 
-    public Double logEMA(int period) {
+    public Double logChangeEMA (int period) {
         List<Double> changes = logChanges();
         if (changes.size() < period) return null;
 
@@ -81,10 +81,55 @@ public class StockAnalyzer {
             ema = (current * alpha) + (ema * (1-alpha));
         }
 
-        // Convert to percentage
-        double percent = (Math.exp(ema) - 1) * 100;
-
-        return percent;
+        // Convert to percentage and return
+        return (Math.exp(ema) - 1) * 100;
     }
+
+    // SIMPLE AVERAGE
+    public double simpleMovingAverage (int period) {
+        if (entries.size() < period) return Double.NaN;
+
+        int start = entries.size() - period;
+        double average = 0;
+        for (int i = start; i < entries.size(); i++) {
+            average += entries.get(i).getClose();
+        }
+        average /= period;
+
+        return average;
+    }
+
+    // STANDARD DEVIATION
+    public double rollingStdDev (int period) {
+        double average = simpleMovingAverage(period);
+
+        int start = entries.size() - period;
+        double sum = 0;
+        for (int i = start; i < entries.size(); i++) {
+            sum += Math.pow(entries.get(i).getClose()- average, 2);
+        }
+
+        // Calculate Stdev and return
+        return Math.sqrt(sum/(period - 1));
+    }
+
+    public double exponentialMovingAverage(int period) {
+        double sum = 0;
+
+        // Set up initial Average
+        for (int i = 0; i < period; i++) {
+              sum += entries.get(i).getClose();
+        }
+        double average = sum/period;
+
+        // Calculate moving average
+        double alpha = 2.0 / (period + 1);
+        for (int i = period; i < entries.size(); i++) {
+            average = entries.get(i).getClose() * alpha + average * (1 - alpha);
+        }
+
+        return average;
+    }
+
 
 }

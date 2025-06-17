@@ -61,24 +61,24 @@ public class stockHistory {
 
 
             // Print Entries
-            for (StockData e : entries) {
-                System.out.println(e);
-            }
+//            for (StockData e : entries) {
+//                System.out.println(e);
+//            }
 
             StockAnalyzer analyzer = new StockAnalyzer(entries);
 
             int periodFifty = 50;
-            Double fiftyEMA = analyzer.calculateEMA(periodFifty);
-            System.out.printf("Latest %d-day EMA of returns: %.2f%%\n", periodFifty, fiftyEMA);
+//            Double fiftyEMA = analyzer.calculateEMA(periodFifty);
+//            System.out.printf("Latest %d-day EMA of returns: %.2f%%\n", periodFifty, fiftyEMA);
 
             int periodTwoHundred = 200;
-            Double twoHundredEMA = analyzer.calculateEMA(periodTwoHundred);
-            System.out.printf("Latest %d-day EMA of returns: %.2f%%\n", periodTwoHundred, twoHundredEMA);
+//            Double twoHundredEMA = analyzer.calculateEMA(periodTwoHundred);
+//            System.out.printf("Latest %d-day EMA of returns: %.2f%%\n", periodTwoHundred, twoHundredEMA);
 
-            double logFifty = analyzer.logEMA(periodFifty);
+            double logFifty = analyzer.logChangeEMA(periodFifty);
             System.out.printf("Latest %d-day log EMA of returns: %.2f%%\n", periodFifty, logFifty);
 
-            double logTwoHundred = analyzer.logEMA(periodTwoHundred);
+            double logTwoHundred = analyzer.logChangeEMA(periodTwoHundred);
             System.out.printf("Latest %d-day log EMA of returns: %.2f%%\n", periodTwoHundred, logTwoHundred);
 
         } catch (Exception e) {
