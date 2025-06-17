@@ -55,7 +55,7 @@ public class StockFetcher {
         return null;
     }
 
-    public void printData(List<StockData> entries) {
+    public void printClose(List<StockData> entries) {
         for (StockData e : entries) {
                     System.out.println(e);
                 }
