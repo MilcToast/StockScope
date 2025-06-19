@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +60,20 @@ public class PortfolioUtilities {
             }
         }
         return Math.sqrt(variance);
+    }
+
+    public double computePorfolioAverageReturn (Map<String, Double> portfolio, Map<String, List<Double>> returns) {
+        double average = 0;
+
+        for (Map.Entry<String,Double> entry : portfolio.entrySet()) {
+            String symbol = entry.getKey();
+            Double weight = entry.getValue();
+
+            List<Double> stockReturns = returns.get(symbol);
+            average += computeAverage(stockReturns) * weight;
+
+        }
+        return average;
     }
 
 }
