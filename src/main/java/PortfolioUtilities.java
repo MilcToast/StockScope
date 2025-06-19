@@ -1,4 +1,6 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PortfolioUtilities {
     public double computeCovariance (List<Double> returnsOne, List<Double> returnsTwo) {
@@ -41,14 +43,21 @@ public class PortfolioUtilities {
         return Math.sqrt(sum/(list.size() - 1));
     }
 
-    public double computePortfolioStdev (List<List<Double>> allReturns, List<Double> weights) {
-        int n = allReturns.size();
+    public double computePortfolioStdev (Map<String, Double> portfolio, Map<String, List<Double>> returns) {
         double variance = 0;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                double covariance = computeCovariance(allReturns.get(i),allReturns.get(j));
-                variance += weights.get(i) * weights.get(j) * covariance;
+        for (Map.Entry<String,Double> i : portfolio.entrySet()) {
+            String symbolI = i.getKey();
+            Double weightI = i.getValue();
+            List<Double> returnsI = returns.get(symbolI);
+
+            for (Map.Entry<String,Double> j : portfolio.entrySet()) {
+                String symbolJ = j.getKey();
+                Double weightJ = j.getValue();
+                List<Double> returnsJ = returns.get(symbolJ);
+
+                double covariance = computeCovariance(returnsI, returnsJ);
+                variance += weightI * weightJ * covariance;
             }
         }
         return Math.sqrt(variance);

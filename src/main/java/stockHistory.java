@@ -1,4 +1,5 @@
 import java.util.*;
+import javafx.*;
 
 public class stockHistory {
     public static void main(String[] args) {
@@ -6,20 +7,20 @@ public class stockHistory {
         int maxDays = 750;
 
         String apiKey = Secret.apiKey1;
-        List<String> symbols = Arrays.asList("GOOG", "TSLA");
 
-        for (String symbol : symbols) {
-            StockFetcher fetcher = new StockFetcher();
+        Map<String, Double> portfolio = new HashMap<>();
+        portfolio.put("GOOG", 0.6);
+        portfolio.put("TSLA", 0.4);
 
-            List<StockData> entries = fetcher.fetch(maxDays, symbol, apiKey);
+        ReturnsBuilder returnsBuilder = new ReturnsBuilder();
+        PortfolioUtilities portfolioUtil = new PortfolioUtilities();
 
-            StockAnalyzer analyzer = new StockAnalyzer(entries);
-            double average = analyzer.simpleMovingAverage(50);
-            double stdev = analyzer.rollingStdDev(50);
-            System.out.println("Stock symbol: " + symbol);
-            System.out.printf("50 day average: %.2f\n", average);
-            System.out.printf("50 day stdev: %.2f\n", stdev);
-        }
+        // Make a List of the Log Returns
+        Map<String, List<Double>> returns = returnsBuilder.buildReturns(portfolio, maxDays, apiKey);
+
+        // Calculate whatever user wants
+        portfolioUtil.computePortfolioStdev(portfolio, returns);
+
 
     }
 }
