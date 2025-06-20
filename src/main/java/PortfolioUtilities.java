@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,16 @@ public class PortfolioUtilities {
 
         }
         return average;
+    }
+
+    public HashMap<String,Double> normalizeWeights(HashMap<String,Double> rawPortfolio) {
+        double total = rawPortfolio.values().stream().mapToDouble(Double :: doubleValue).sum();
+        HashMap<String, Double> portfolio = new HashMap<>();
+        for (Map.Entry<String,Double> entry : rawPortfolio.entrySet()) {
+            portfolio.put(entry.getKey(), entry.getValue() / total);
+        }
+
+        return portfolio;
     }
 
 }

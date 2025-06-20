@@ -6,15 +6,14 @@ public class stockHistory {
         int maxDays = 250;
         String apiKey = Secret.apiKey1;
 
-        Map<String, Double> portfolio = new HashMap<>();
-        portfolio.put("RDDT", 0.6);
-        portfolio.put("GOOG", 0.4);
-        // ADD THING THAT NORMALIZES WEIGHTS
+        HashMap<String, Double> rawPortfolio = new HashMap<>();
+        rawPortfolio.put("RDDT", 0.6);
+        rawPortfolio.put("GOOG", 0.4);
 
         ReturnsBuilder returnsBuilder = new ReturnsBuilder();
         PortfolioUtilities portfolioUtil = new PortfolioUtilities();
-
         // Make a List of the Log Returns
+        HashMap<String,Double> portfolio = portfolioUtil.normalizeWeights(rawPortfolio);
         Map<String, List<Double>> returns = returnsBuilder.buildReturns(portfolio, maxDays, apiKey);
 
         // Calculate whatever user wants
