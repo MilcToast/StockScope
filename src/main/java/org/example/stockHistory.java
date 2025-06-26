@@ -1,14 +1,17 @@
+package org.example;
+
 import java.util.*;
 // import javafx.*;
 
 public class stockHistory {
     public static void main(String[] args) {
-        int maxDays = 250;
+        int maxDays = 50;
         String apiKey = Secret.apiKey1;
 
         HashMap<String, Double> rawPortfolio = new HashMap<>();
-        rawPortfolio.put("RDDT", 0.6);
-        rawPortfolio.put("GOOG", 0.4);
+        rawPortfolio.put("RDDT", 0.1);
+        rawPortfolio.put("GOOG", 0.2);
+        rawPortfolio.put("TSLA", 0.8);
 
         ReturnsBuilder returnsBuilder = new ReturnsBuilder();
         PortfolioUtilities portfolioUtil = new PortfolioUtilities();
