@@ -1,9 +1,28 @@
 package org.example;
 
+import java.io.IOException;
 import java.util.*;
-// import javafx.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
-public class stockHistory {
+public class stockHistory extends Application {
+    @Override
+    public void start (Stage stage) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("scene1.fxml")));
+        Scene scene = new Scene(root);
+
+        Image icon = new Image("img.png");
+        stage.getIcons().add(icon);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public static void main(String[] args) {
         int maxDays = 50;
         String apiKey = Secret.apiKey1;
@@ -28,7 +47,7 @@ public class stockHistory {
         System.out.printf("Your Portfolio's Mean Return is: %.2f%%\n", meanPercentReturn);
         System.out.printf("Your Portfolio's Standard Deviation is: %.2f%%\n", percentstdev);
 
-
+        launch(args);
 
     }
 }
