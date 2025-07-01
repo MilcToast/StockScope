@@ -79,7 +79,7 @@ public class Scene2Controller implements Initializable {
         stage.show();
     }
 
-    public void calculateResults(ActionEvent event) {
+    public void calculateResults() {
         bottomContainer.getChildren().clear();
         HashMap<String, Double> rawPortfolio = new HashMap<>();
 
@@ -104,12 +104,21 @@ public class Scene2Controller implements Initializable {
             HBox newHorBox = new HBox(10);
             double simplMovAve = analyzer.simpleMovingAverage(maxDays);
             double simplMovStdev = analyzer.rollingStdDev(maxDays);
+            double todayAve = analyzer.simpleMovingAverage(1);
+            double priceChangeAvg = PortfolioUtilities.computeAverage(analyzer.percentChanges());
+            double priceChangeStdev = PortfolioUtilities.computeStdev(analyzer.percentChanges());
 
             String avg = String.format("%.2f", simplMovAve);
             String std = String.format("%.2f", simplMovStdev);
+            String todayAvgStr = String.format("%.2f", todayAve);
+            String changeAvgStr = String.format("%.2f", priceChangeAvg);
+            String changeStdevStr = String.format("%.2f", priceChangeStdev);
 
-            newHorBox.getChildren().addAll(new Label(maxDays + "-day Average " + avg),
-                                           new Label(maxDays + "-day Stdev: " + std)
+            newHorBox.getChildren().addAll(new Label(maxDays + "-day Average: " + avg),
+                                           new Label(maxDays + "-day Std dev: " + std),
+                                           new Label("Last Closing Price: " + todayAvgStr),
+                                           new Label(maxDays + "-day Average Daily Change: " + changeAvgStr + "%"),
+                                           new Label(maxDays + "-day Daily Change Std dev.: " + changeStdevStr + "%")
                                            );
             bottomContainer.getChildren().add(newHorBox);
 
@@ -122,14 +131,14 @@ public class Scene2Controller implements Initializable {
     }
 
     public void displayPortfolioAverage(HashMap<String,Double> portfolio, Map<String, List<Double>> returns) {
-        double meanLogReturn = portfolioUtil.computePorfolioAverageReturn(portfolio, returns);
-        String meanPercentReturn = String.format("%.2f", (Math.exp(meanLogReturn) - 1) * 100);
+        double meanReturn = portfolioUtil.computePortfolioAverageReturn(portfolio, returns);
+        String meanPercentReturn = String.format("%.2f", meanReturn);
         averageLabel.setText("Your Portfolio Average is: " + meanPercentReturn + "%");
     }
 
     public void displayPortfolioSTDEV(HashMap<String,Double> portfolio, Map<String, List<Double>> returns) {
-        double logstdev = portfolioUtil.computePortfolioStdev(portfolio, returns);
-        String percentstdev = String.format("%.2f", (Math.exp(logstdev) - 1) * 100);
+        double stdev = portfolioUtil.computePortfolioStdev(portfolio, returns);
+        String percentstdev = String.format("%.2f", stdev);
         stdevLabel.setText("Your Portfolio Standard Deviation is: " + percentstdev + "%");
     }
 

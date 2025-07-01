@@ -17,7 +17,6 @@ public class StockAnalyzer {
 
             percentChanges.add(percentChange);
         }
-
         return percentChanges;
     }
 
@@ -43,45 +42,6 @@ public class StockAnalyzer {
 
         // Latest EMA
         return ema;
-    }
-
-    public List<Double> logChanges () {
-        List<Double> logChanges = new ArrayList<>();
-
-        for (int i = 1; i < entries.size(); i++) {
-            double prevClose = entries.get(i-1).getClose();
-            double currClose = entries.get(i).getClose();
-
-            if (prevClose > 0) {
-                double logChange = Math.log(currClose / prevClose);
-                logChanges.add(logChange);
-            }
-        }
-
-        return logChanges;
-    }
-
-    public Double logChangeEMA (int period) {
-        List<Double> changes = logChanges();
-        if (changes.size() < period) return null;
-
-        double alpha = 2.0/(period + 1);
-
-        // Initial EMA
-        double sum = 0;
-        for (int i = 0; i < period; i++) {
-            sum += changes.get(i);
-        }
-        double ema = sum/period;
-
-        // Recursive EMA
-        for (int i = period; i < changes.size(); i++) {
-            double current = changes.get(i);
-            ema = (current * alpha) + (ema * (1-alpha));
-        }
-
-        // Convert to percentage and return
-        return (Math.exp(ema) - 1) * 100;
     }
 
     // SIMPLE AVERAGE

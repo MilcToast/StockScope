@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class stockHistory extends Application {
@@ -39,7 +38,7 @@ public class stockHistory extends Application {
         Map<String, List<Double>> returns = returnsBuilder.buildReturns(portfolio, maxDays, apiKey);
 
         // Calculate whatever user wants
-        double meanLogReturn = portfolioUtil.computePorfolioAverageReturn(portfolio, returns);
+        double meanLogReturn = portfolioUtil.computePortfolioAverageReturn(portfolio, returns);
         double meanPercentReturn = (Math.exp(meanLogReturn) - 1) * 100;
         double logstdev = portfolioUtil.computePortfolioStdev(portfolio, returns);
         double percentstdev = (Math.exp(logstdev) - 1) * 100;

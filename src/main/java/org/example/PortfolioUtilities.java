@@ -65,7 +65,7 @@ public class PortfolioUtilities {
         return Math.sqrt(variance);
     }
 
-    public double computePorfolioAverageReturn (Map<String, Double> portfolio, Map<String, List<Double>> returns) {
+    public double computePortfolioAverageReturn (Map<String, Double> portfolio, Map<String, List<Double>> returns) {
         double average = 0;
 
         for (Map.Entry<String,Double> entry : portfolio.entrySet()) {
