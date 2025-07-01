@@ -24,7 +24,7 @@ public class StockAnalyzer {
     // Calculate the Exponential Moving Average (EMA)
     public Double calcChangeEMA (int period) {
         List<Double> changes = percentChanges();
-        if (changes.size() == 0) return null;
+        if (changes.isEmpty()) return null;
 
         double alpha = 2.0/(period + 1);
 

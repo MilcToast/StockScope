@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.io.IOException;
@@ -20,6 +21,8 @@ public class Scene1Controller implements Initializable {
     private Label myLabel;
     @FXML
     private ChoiceBox<String> myChoiceBox;
+    @FXML
+    private TextField daysField;
     @FXML
     private Button myFirstButton;
 
@@ -39,7 +42,8 @@ public class Scene1Controller implements Initializable {
 
         Scene2Controller controller = loader.getController();
         int selectedCount = Integer.parseInt(myChoiceBox.getValue());
-        controller.setNumberTextFields(selectedCount);
+        int maxDays = Integer.parseInt(daysField.getText().trim());
+        controller.setNumberTextFields(selectedCount, maxDays);
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);

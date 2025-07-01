@@ -16,7 +16,7 @@ public class ReturnsBuilder {
             List<StockData> entries = fetcher.fetch(maxDays, symbol, apikey);
             StockAnalyzer analyzer = new StockAnalyzer(entries);
 
-            returns.put(symbol, analyzer.logChanges());
+            returns.put(symbol, analyzer.percentChanges());
         }
         return returns;
     }
