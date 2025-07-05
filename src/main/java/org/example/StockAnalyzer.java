@@ -90,4 +90,10 @@ public class StockAnalyzer {
         return average;
     }
 
+    public double sharpeRatio(double averageReturn, double stdev, double annualRate) {
+        double riskFreeRate = Math.pow(1.0 + (annualRate / 100), 1.0 / 250) - 1;
+
+        return  (averageReturn - riskFreeRate) / stdev;
+    }
+
 }

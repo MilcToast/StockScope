@@ -33,6 +33,8 @@ public class Scene2Controller implements Initializable {
     private Label averageLabel;
     @FXML
     private Label stdevLabel;
+    @FXML
+    private TextField sharpeText;
 
     private final HashMap<TextField, TextField> fieldMap = new HashMap<>();
 
@@ -83,6 +85,8 @@ public class Scene2Controller implements Initializable {
         bottomContainer.getChildren().clear();
         HashMap<String, Double> rawPortfolio = new HashMap<>();
 
+        double riskFreeRate = Double.parseDouble(sharpeText.getText());
+
         for (Map.Entry<TextField, TextField> entry : fieldMap.entrySet()) {
             String stock = entry.getKey().getText().trim();
             double weight = Double.parseDouble(entry.getValue().getText().trim());
@@ -107,18 +111,21 @@ public class Scene2Controller implements Initializable {
             double todayAve = analyzer.simpleMovingAverage(1);
             double priceChangeAvg = PortfolioUtilities.computeAverage(analyzer.percentChanges());
             double priceChangeStdev = PortfolioUtilities.computeStdev(analyzer.percentChanges());
+            double sharpeRatio = analyzer.sharpeRatio(priceChangeAvg, priceChangeStdev, riskFreeRate);
 
             String avg = String.format("%.2f", simplMovAve);
             String std = String.format("%.2f", simplMovStdev);
             String todayAvgStr = String.format("%.2f", todayAve);
             String changeAvgStr = String.format("%.2f", priceChangeAvg);
             String changeStdevStr = String.format("%.2f", priceChangeStdev);
+            String sharpeRatioStr = String.format("%.2f", sharpeRatio);
 
             newHorBox.getChildren().addAll(new Label(maxDays + "-day Average: " + avg),
                                            new Label(maxDays + "-day Std dev: " + std),
                                            new Label("Last Closing Price: " + todayAvgStr),
                                            new Label(maxDays + "-day Average Daily Change: " + changeAvgStr + "%"),
-                                           new Label(maxDays + "-day Daily Change Std dev.: " + changeStdevStr + "%")
+                                           new Label(maxDays + "-day Daily Change Std dev.: " + changeStdevStr + "%"),
+                                           new Label("Sharpe Ratio: " + sharpeRatioStr)
                                            );
             bottomContainer.getChildren().add(newHorBox);
 

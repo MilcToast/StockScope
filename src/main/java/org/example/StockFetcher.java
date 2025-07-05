@@ -31,6 +31,16 @@ public class StockFetcher {
 
             JsonObject timeSeries = root.getAsJsonObject("Time Series (Daily)");
 
+            if (timeSeries == null) {
+                System.out.println("Error: Could not fetch Time Series for " + symbol);
+                System.out.println("Response:\n" + root);
+                return Collections.emptyList(); // or throw exception
+            }
+            if (root.has("Note")) {
+                System.out.println("API limit hit: " + root.get("Note").getAsString());
+                return Collections.emptyList();
+            }
+
             // Data for Each Day
             List<StockData> entries = new ArrayList<>();
 
