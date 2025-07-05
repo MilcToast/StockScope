@@ -98,34 +98,46 @@ public class Scene2Controller implements Initializable {
 
         Set<String> symbols = portfolio.keySet();
         StockFetcher fetcher = new StockFetcher();
+
+        List<StockData> marketEntries = fetcher.fetch(maxDays, "SPY", Secret.apiKey1);
+        StockAnalyzer marketAnalyzer = new StockAnalyzer(marketEntries);
+
+        List<Double> marketReturns = marketAnalyzer.percentChanges();
+
         for (String symbol : symbols) {
             List<StockData> entries = fetcher.fetch(maxDays, symbol, Secret.apiKey1);
             StockAnalyzer analyzer = new StockAnalyzer(entries);
 
-            Label newLabel = new Label(symbol);
+            Label newLabel = new Label("Metrics for: " + symbol);
+            newLabel.setStyle("-fx-font-weight: bold; -fx-padding: 10 0 5 0;");
             bottomContainer.getChildren().add(newLabel);
+
+            List<Double> stockReturns = analyzer.percentChanges();
 
             HBox newHorBox = new HBox(10);
             double simplMovAve = analyzer.simpleMovingAverage(maxDays);
             double simplMovStdev = analyzer.rollingStdDev(maxDays);
-            double todayAve = analyzer.simpleMovingAverage(1);
-            double priceChangeAvg = PortfolioUtilities.computeAverage(analyzer.percentChanges());
-            double priceChangeStdev = PortfolioUtilities.computeStdev(analyzer.percentChanges());
+            double lastClose = entries.get(entries.size() - 1).getClose();
+            double priceChangeAvg = PortfolioUtilities.computeAverage(stockReturns);
+            double priceChangeStdev = PortfolioUtilities.computeStdev(stockReturns);
             double sharpeRatio = analyzer.sharpeRatio(priceChangeAvg, priceChangeStdev, riskFreeRate);
+            double beta = analyzer.beta(stockReturns, marketReturns);
 
             String avg = String.format("%.2f", simplMovAve);
             String std = String.format("%.2f", simplMovStdev);
-            String todayAvgStr = String.format("%.2f", todayAve);
+            String lastCloseStr = String.format("%.2f", lastClose);
             String changeAvgStr = String.format("%.2f", priceChangeAvg);
             String changeStdevStr = String.format("%.2f", priceChangeStdev);
             String sharpeRatioStr = String.format("%.2f", sharpeRatio);
+            String betaStr = String.format("%.2f", beta);
 
             newHorBox.getChildren().addAll(new Label(maxDays + "-day Average: " + avg),
                                            new Label(maxDays + "-day Std dev: " + std),
-                                           new Label("Last Closing Price: " + todayAvgStr),
+                                           new Label("Last Closing Price: " + lastCloseStr),
                                            new Label(maxDays + "-day Average Daily Change: " + changeAvgStr + "%"),
                                            new Label(maxDays + "-day Daily Change Std dev.: " + changeStdevStr + "%"),
-                                           new Label("Sharpe Ratio: " + sharpeRatioStr)
+                                           new Label("Sharpe Ratio: " + sharpeRatioStr),
+                                           new Label("Beta (Market: SPY): " + betaStr)
                                            );
             bottomContainer.getChildren().add(newHorBox);
 

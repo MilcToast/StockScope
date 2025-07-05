@@ -96,4 +96,13 @@ public class StockAnalyzer {
         return  (averageReturn - riskFreeRate) / stdev;
     }
 
+    public double beta(List<Double> stockReturns, List<Double> marketReturns) {
+        PortfolioUtilities portfolioUtilities = new PortfolioUtilities();
+
+        double covariance = portfolioUtilities.computeCovariance(stockReturns,marketReturns);
+        double variance = Math.pow(PortfolioUtilities.computeStdev(marketReturns), 2);
+
+        return covariance/variance;
+    }
+
 }
