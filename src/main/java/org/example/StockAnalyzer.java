@@ -20,30 +20,6 @@ public class StockAnalyzer {
         return percentChanges;
     }
 
-    // Calculate the Exponential Moving Average (EMA)
-    public Double calcChangeEMA (int period) {
-        List<Double> changes = percentChanges();
-        if (changes.isEmpty()) return null;
-
-        double alpha = 2.0/(period + 1);
-
-        // Initial EMA
-        double sum = 0;
-        for (int i = 0; i < period; i++) {
-            sum += changes.get(i);
-        }
-        double ema = sum/period;
-
-        // Recursive EMA
-        for (int i = period; i < changes.size(); i++) {
-            double current = changes.get(i);
-            ema = (current * alpha) + (ema * (1-alpha));
-        }
-
-        // Latest EMA
-        return ema;
-    }
-
     // SIMPLE AVERAGE
     public double simpleMovingAverage (int period) {
         if (entries.size() < period) return Double.NaN;
@@ -72,24 +48,6 @@ public class StockAnalyzer {
         return Math.sqrt(sum/(period - 1));
     }
 
-    public double exponentialMovingAverage(int period) {
-        double sum = 0;
-
-        // Set up initial Average
-        for (int i = 0; i < period; i++) {
-              sum += entries.get(i).getClose();
-        }
-        double average = sum/period;
-
-        // Calculate moving average
-        double alpha = 2.0 / (period + 1);
-        for (int i = period; i < entries.size(); i++) {
-            average = entries.get(i).getClose() * alpha + average * (1 - alpha);
-        }
-
-        return average;
-    }
-
     public double sharpeRatio(double averageReturn, double stdev, double annualRate) {
         double riskFreeRate = Math.pow(1.0 + (annualRate / 100), 1.0 / 250) - 1;
 
@@ -97,10 +55,10 @@ public class StockAnalyzer {
     }
 
     public double beta(List<Double> stockReturns, List<Double> marketReturns) {
-        PortfolioUtilities portfolioUtilities = new PortfolioUtilities();
+        int daysInYear = 250;
 
-        double covariance = portfolioUtilities.computeCovariance(stockReturns,marketReturns);
-        double variance = Math.pow(PortfolioUtilities.computeStdev(marketReturns), 2);
+        double covariance = PortfolioUtilities.computeCovariance(stockReturns, marketReturns, daysInYear);
+        double variance = Math.pow(PortfolioUtilities.computeStdev(marketReturns,daysInYear), 2);
 
         return covariance/variance;
     }

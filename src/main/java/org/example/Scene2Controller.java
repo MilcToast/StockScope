@@ -99,27 +99,35 @@ public class Scene2Controller implements Initializable {
         Set<String> symbols = portfolio.keySet();
         StockFetcher fetcher = new StockFetcher();
 
-        List<StockData> marketEntries = fetcher.fetch(maxDays, "SPY", Secret.apiKey1);
+        List<StockData> marketEntries = fetcher.fetch(250, "SPY", Secret.apiKey1);
         StockAnalyzer marketAnalyzer = new StockAnalyzer(marketEntries);
 
         List<Double> marketReturns = marketAnalyzer.percentChanges();
 
         for (String symbol : symbols) {
-            List<StockData> entries = fetcher.fetch(maxDays, symbol, Secret.apiKey1);
+            List<StockData> entries = fetcher.fetch(1250, symbol, Secret.apiKey1);
             StockAnalyzer analyzer = new StockAnalyzer(entries);
 
             Label newLabel = new Label("Metrics for: " + symbol);
-            newLabel.setStyle("-fx-font-weight: bold; -fx-padding: 10 0 5 0;");
+            newLabel.setStyle("-fx-font-weight: bold; -fx-padding: 10 0 5 10;");
             bottomContainer.getChildren().add(newLabel);
 
             List<Double> stockReturns = analyzer.percentChanges();
+
+            System.out.println("Entries: " + entries.size());
+            System.out.println("Percent Changes: " + stockReturns.size());
+
+//            for (Double aDouble : stockReturns) {
+//                System.out.println("return: " + aDouble);
+//            }
 
             HBox newHorBox = new HBox(10);
             double simplMovAve = analyzer.simpleMovingAverage(maxDays);
             double simplMovStdev = analyzer.rollingStdDev(maxDays);
             double lastClose = entries.get(entries.size() - 1).getClose();
-            double priceChangeAvg = PortfolioUtilities.computeAverage(stockReturns);
-            double priceChangeStdev = PortfolioUtilities.computeStdev(stockReturns);
+            System.out.println("CALCULATING IN CONTROLLER");
+            double priceChangeAvg = PortfolioUtilities.computeAverage(stockReturns, maxDays);
+            double priceChangeStdev = PortfolioUtilities.computeStdev(stockReturns, maxDays);
             double sharpeRatio = analyzer.sharpeRatio(priceChangeAvg, priceChangeStdev, riskFreeRate);
             double beta = analyzer.beta(stockReturns, marketReturns);
 
@@ -137,7 +145,7 @@ public class Scene2Controller implements Initializable {
                                            new Label(maxDays + "-day Average Daily Change: " + changeAvgStr + "%"),
                                            new Label(maxDays + "-day Daily Change Std dev.: " + changeStdevStr + "%"),
                                            new Label("Sharpe Ratio: " + sharpeRatioStr),
-                                           new Label("Beta (Market: SPY): " + betaStr)
+                                           new Label("1-year Beta (Market: SPY): " + betaStr)
                                            );
             bottomContainer.getChildren().add(newHorBox);
 
@@ -150,13 +158,13 @@ public class Scene2Controller implements Initializable {
     }
 
     public void displayPortfolioAverage(HashMap<String,Double> portfolio, Map<String, List<Double>> returns) {
-        double meanReturn = portfolioUtil.computePortfolioAverageReturn(portfolio, returns);
+        double meanReturn = portfolioUtil.computePortfolioAverageReturn(portfolio, returns, maxDays);
         String meanPercentReturn = String.format("%.2f", meanReturn);
         averageLabel.setText("Your Portfolio Average is: " + meanPercentReturn + "%");
     }
 
     public void displayPortfolioSTDEV(HashMap<String,Double> portfolio, Map<String, List<Double>> returns) {
-        double stdev = portfolioUtil.computePortfolioStdev(portfolio, returns);
+        double stdev = portfolioUtil.computePortfolioStdev(portfolio, returns, maxDays);
         String percentstdev = String.format("%.2f", stdev);
         stdevLabel.setText("Your Portfolio Standard Deviation is: " + percentstdev + "%");
     }

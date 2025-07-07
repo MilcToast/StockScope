@@ -56,7 +56,6 @@ public class StockFetcher {
                 entries.add(new StockData(timestamp, close));
             }
 
-            // Sort from Most Recent
             entries.sort(Comparator.comparing(StockData::getTimestamp));
 
         return entries;

@@ -5,47 +5,61 @@ import java.util.List;
 import java.util.Map;
 
 public class PortfolioUtilities {
-    public double computeCovariance (List<Double> returnsOne, List<Double> returnsTwo) {
-        double averageOne = computeAverage(returnsOne);
-        double averageTwo = computeAverage(returnsTwo);
 
-        int n = Math.min(returnsOne.size(), returnsTwo.size());
+    public static double computeCovariance (List<Double> returnsOne, List<Double> returnsTwo, int period) {
+        System.out.println("THIS IS A CALCULATION FOR COVARIANCE");
+        double averageOne = computeAverage(returnsOne, period);
+        double averageTwo = computeAverage(returnsTwo, period);
+
+        int start = Math.max(0, returnsOne.size() - period);
+        int end = Math.min(returnsOne.size(), returnsTwo.size());
+
         double sum = 0;
-        for (int i = 0; i < n; i++) {
+        for (int i = start; i < end; i++) {
+//            double value1 = returnsOne.get(i) - averageOne;
+//            double value2 = returnsTwo.get(i) - averageTwo;
+//            System.out.println("value 1: " + value1 + ", value 2: " + value2);
             sum += (returnsOne.get(i) - averageOne) * (returnsTwo.get(i) - averageTwo);
         }
 
-        return sum/(n-1);
+        return sum/(end - start - 1);
     }
 
-    public double computeCorrelation(List<Double> returnsOne, List<Double> returnsTwo) {
-        double covariance = computeCovariance(returnsOne, returnsTwo);
-        double stdevOne = computeStdev(returnsOne);
-        double stdevTwo = computeStdev(returnsTwo);
+//    public double computeCorrelation(List<Double> returnsOne, List<Double> returnsTwo, int period) {
+//        double covariance = computeCovariance(returnsOne, returnsTwo, period);
+//        double stdevOne = computeStdev(returnsOne, period);
+//        double stdevTwo = computeStdev(returnsTwo, period);
+//
+//        return covariance / (stdevOne * stdevTwo);
+//    }
 
-        return covariance / (stdevOne * stdevTwo);
-    }
+    public static double computeAverage (List<Double> list, int period) {
+        int start = Math.max(0, list.size() - period);
+        System.out.println("start: " + start);
+        System.out.println("end: " + list.size());
 
-    public static double computeAverage (List<Double> list) {
         double sum = 0;
-        for (Double aDouble : list) {
-            sum += aDouble;
+        for (int i = start; i < list.size(); i++) {
+            sum += list.get(i);
         }
-        return sum/list.size();
+        return sum/ (list.size() - start);
     }
 
-    public static double computeStdev (List<Double> list) {
-        double mean = computeAverage(list);
+    public static double computeStdev (List<Double> list, int period) {
+        System.out.println("THIS IS A CALCULATION FOR STANDARD DEVIATION");
+        int start = Math.max(0, list.size() - period);
+        List<Double> subList = list.subList(start, list.size());
+        double mean = computeAverage(subList, subList.size());
+
         double sum = 0;
-
-        for (Double aDouble : list) {
-            sum += Math.pow(aDouble - mean, 2);
+        for (double value : subList) {
+            sum += Math.pow(value - mean, 2);
         }
 
-        return Math.sqrt(sum/(list.size() - 1));
+        return Math.sqrt(sum/(subList.size() - 1));
     }
 
-    public double computePortfolioStdev (Map<String, Double> portfolio, Map<String, List<Double>> returns) {
+    public double computePortfolioStdev (Map<String, Double> portfolio, Map<String, List<Double>> returns, int period) {
         double variance = 0;
 
         for (Map.Entry<String,Double> i : portfolio.entrySet()) {
@@ -58,14 +72,15 @@ public class PortfolioUtilities {
                 Double weightJ = j.getValue();
                 List<Double> returnsJ = returns.get(symbolJ);
 
-                double covariance = computeCovariance(returnsI, returnsJ);
+                double covariance = computeCovariance(returnsI, returnsJ, period);
                 variance += weightI * weightJ * covariance;
             }
         }
         return Math.sqrt(variance);
     }
 
-    public double computePortfolioAverageReturn (Map<String, Double> portfolio, Map<String, List<Double>> returns) {
+    public double computePortfolioAverageReturn (Map<String, Double> portfolio, Map<String, List<Double>> returns, int period) {
+        System.out.println("THIS IS CALCULATING PORTFOLIO AVERAGE RETURN");
         double average = 0;
 
         for (Map.Entry<String,Double> entry : portfolio.entrySet()) {
@@ -73,7 +88,7 @@ public class PortfolioUtilities {
             Double weight = entry.getValue();
 
             List<Double> stockReturns = returns.get(symbol);
-            average += computeAverage(stockReturns) * weight;
+            average += computeAverage(stockReturns, period) * weight;
 
         }
         return average;
