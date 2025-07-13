@@ -2,6 +2,9 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class StockAnalyzer {
     private final List<StockData> entries;
     public StockAnalyzer(List<StockData> entries) {this.entries = entries;}
@@ -17,6 +20,36 @@ public class StockAnalyzer {
 
             percentChanges.add(percentChange);
         }
+        return percentChanges;
+    }
+
+    // CALCULATE MONTHLY CHANGES
+
+    public List<Double> monthlyPercentChanges() {
+        Map<String, Double> lastClosePerMonth = new TreeMap<>();
+
+        for (StockData entry : entries) {
+            String date = entry.getTimestamp();
+            String yearMonth = date.substring(0, 7);
+
+            lastClosePerMonth.put(yearMonth, entry.getClose());
+        }
+
+        List<Double> monthlyCloses = new ArrayList<>(lastClosePerMonth.values());
+        List<Double> percentChanges = new ArrayList<>();
+
+        for (int i = 1; i < monthlyCloses.size(); i++) {
+            double previousClose = monthlyCloses.get(i-1);
+            double currentClose = monthlyCloses.get(i);
+            double percentChange = (currentClose - previousClose)/previousClose * 100;
+
+            percentChanges.add(percentChange);
+        }
+
+        if (!percentChanges.isEmpty()) {
+            percentChanges.remove(percentChanges.size() - 1);
+        }
+
         return percentChanges;
     }
 
@@ -48,10 +81,14 @@ public class StockAnalyzer {
         return Math.sqrt(sum/(period - 1));
     }
 
-    public double sharpeRatio(double averageReturn, double stdev, double annualRate) {
-        double riskFreeRate = Math.pow(1.0 + (annualRate / 100), 1.0 / 250) - 1;
+    public double sharpeRatio(List<Double> monthlyChanges, double riskFreeRate) {
+        double initialPrice = entries.get(entries.size() - 252).getClose();
+        double finalPrice = entries.get(entries.size() - 1).getClose();
 
-        return  (averageReturn - riskFreeRate) / stdev;
+        double annualReturn = (finalPrice - initialPrice) / initialPrice * 100;
+        double stdev = PortfolioUtilities.computeStdev(monthlyChanges, 12);
+
+        return  (annualReturn - riskFreeRate) / stdev;
     }
 
     public double beta(List<Double> stockReturns, List<Double> marketReturns) {

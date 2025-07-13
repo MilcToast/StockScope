@@ -114,21 +114,13 @@ public class Scene2Controller implements Initializable {
 
             List<Double> stockReturns = analyzer.percentChanges();
 
-            System.out.println("Entries: " + entries.size());
-            System.out.println("Percent Changes: " + stockReturns.size());
-
-//            for (Double aDouble : stockReturns) {
-//                System.out.println("return: " + aDouble);
-//            }
-
             HBox newHorBox = new HBox(10);
             double simplMovAve = analyzer.simpleMovingAverage(maxDays);
             double simplMovStdev = analyzer.rollingStdDev(maxDays);
             double lastClose = entries.get(entries.size() - 1).getClose();
-            System.out.println("CALCULATING IN CONTROLLER");
             double priceChangeAvg = PortfolioUtilities.computeAverage(stockReturns, maxDays);
             double priceChangeStdev = PortfolioUtilities.computeStdev(stockReturns, maxDays);
-            double sharpeRatio = analyzer.sharpeRatio(priceChangeAvg, priceChangeStdev, riskFreeRate);
+            double sharpeRatio = analyzer.sharpeRatio(analyzer.monthlyPercentChanges(), riskFreeRate);
             double beta = analyzer.beta(stockReturns, marketReturns);
 
             String avg = String.format("%.2f", simplMovAve);
@@ -144,7 +136,7 @@ public class Scene2Controller implements Initializable {
                                            new Label("Last Closing Price: " + lastCloseStr),
                                            new Label(maxDays + "-day Average Daily Change: " + changeAvgStr + "%"),
                                            new Label(maxDays + "-day Daily Change Std dev.: " + changeStdevStr + "%"),
-                                           new Label("Sharpe Ratio: " + sharpeRatioStr),
+                                           new Label("1-year Sharpe Ratio: " + sharpeRatioStr),
                                            new Label("1-year Beta (Market: SPY): " + betaStr)
                                            );
             bottomContainer.getChildren().add(newHorBox);

@@ -7,7 +7,6 @@ import java.util.Map;
 public class PortfolioUtilities {
 
     public static double computeCovariance (List<Double> returnsOne, List<Double> returnsTwo, int period) {
-        System.out.println("THIS IS A CALCULATION FOR COVARIANCE");
         double averageOne = computeAverage(returnsOne, period);
         double averageTwo = computeAverage(returnsTwo, period);
 
@@ -16,9 +15,6 @@ public class PortfolioUtilities {
 
         double sum = 0;
         for (int i = start; i < end; i++) {
-//            double value1 = returnsOne.get(i) - averageOne;
-//            double value2 = returnsTwo.get(i) - averageTwo;
-//            System.out.println("value 1: " + value1 + ", value 2: " + value2);
             sum += (returnsOne.get(i) - averageOne) * (returnsTwo.get(i) - averageTwo);
         }
 
@@ -35,8 +31,6 @@ public class PortfolioUtilities {
 
     public static double computeAverage (List<Double> list, int period) {
         int start = Math.max(0, list.size() - period);
-        System.out.println("start: " + start);
-        System.out.println("end: " + list.size());
 
         double sum = 0;
         for (int i = start; i < list.size(); i++) {
@@ -46,7 +40,6 @@ public class PortfolioUtilities {
     }
 
     public static double computeStdev (List<Double> list, int period) {
-        System.out.println("THIS IS A CALCULATION FOR STANDARD DEVIATION");
         int start = Math.max(0, list.size() - period);
         List<Double> subList = list.subList(start, list.size());
         double mean = computeAverage(subList, subList.size());
@@ -80,7 +73,6 @@ public class PortfolioUtilities {
     }
 
     public double computePortfolioAverageReturn (Map<String, Double> portfolio, Map<String, List<Double>> returns, int period) {
-        System.out.println("THIS IS CALCULATING PORTFOLIO AVERAGE RETURN");
         double average = 0;
 
         for (Map.Entry<String,Double> entry : portfolio.entrySet()) {
