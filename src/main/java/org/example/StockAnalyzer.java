@@ -9,6 +9,12 @@ public class StockAnalyzer {
     private final List<StockData> entries;
     public StockAnalyzer(List<StockData> entries) {this.entries = entries;}
 
+    public void printClose() {
+        for (StockData e : entries) {
+            System.out.println(e);
+        }
+    }
+
     // Calculate all the Percent Changes
     public List<Double> percentChanges () {
         List<Double> percentChanges = new ArrayList<>();
@@ -87,15 +93,18 @@ public class StockAnalyzer {
 
         double annualReturn = (finalPrice - initialPrice) / initialPrice * 100;
         double stdev = PortfolioUtilities.computeStdev(monthlyChanges, 12);
+        double annualStdev  = stdev * Math.sqrt(12);
 
-        return  (annualReturn - riskFreeRate) / stdev;
+        return  (annualReturn - riskFreeRate) / annualStdev;
     }
 
     public double beta(List<Double> stockReturns, List<Double> marketReturns) {
         int daysInYear = 250;
 
         double covariance = PortfolioUtilities.computeCovariance(stockReturns, marketReturns, daysInYear);
+        System.out.println("Covariance: " + covariance);
         double variance = Math.pow(PortfolioUtilities.computeStdev(marketReturns,daysInYear), 2);
+        System.out.println("Variance: " + variance);
 
         return covariance/variance;
     }

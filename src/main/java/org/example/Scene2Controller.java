@@ -99,14 +99,18 @@ public class Scene2Controller implements Initializable {
         Set<String> symbols = portfolio.keySet();
         StockFetcher fetcher = new StockFetcher();
 
-        List<StockData> marketEntries = fetcher.fetch(250, "SPY", Secret.apiKey1);
+        List<StockData> marketEntries = fetcher.fetch(250, "SPY", Secret.apiKey2);
         StockAnalyzer marketAnalyzer = new StockAnalyzer(marketEntries);
+
+        marketAnalyzer.printClose();
 
         List<Double> marketReturns = marketAnalyzer.percentChanges();
 
         for (String symbol : symbols) {
-            List<StockData> entries = fetcher.fetch(1250, symbol, Secret.apiKey1);
+            List<StockData> entries = fetcher.fetch(1250, symbol, Secret.apiKey2);
             StockAnalyzer analyzer = new StockAnalyzer(entries);
+
+            analyzer.printClose();
 
             Label newLabel = new Label("Metrics for: " + symbol);
             newLabel.setStyle("-fx-font-weight: bold; -fx-padding: 10 0 5 10;");

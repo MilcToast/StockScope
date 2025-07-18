@@ -7,15 +7,23 @@ import java.util.Map;
 public class PortfolioUtilities {
 
     public static double computeCovariance (List<Double> returnsOne, List<Double> returnsTwo, int period) {
-        double averageOne = computeAverage(returnsOne, period);
-        double averageTwo = computeAverage(returnsTwo, period);
+        int size = Math.min(period, Math.min(returnsOne.size(), returnsTwo.size()));
+
+        int startOne = returnsOne.size() - size;
+        int startTwo = returnsTwo.size() - size;
+
+        List<Double> tailOne = returnsOne.subList(startOne, returnsOne.size());
+        List<Double> tailTwo = returnsTwo.subList(startTwo, returnsTwo.size());
+
+        double averageOne = computeAverage(tailOne, size);
+        double averageTwo = computeAverage(tailTwo, size);
 
         int start = Math.max(0, returnsOne.size() - period);
         int end = Math.min(returnsOne.size(), returnsTwo.size());
 
         double sum = 0;
-        for (int i = start; i < end; i++) {
-            sum += (returnsOne.get(i) - averageOne) * (returnsTwo.get(i) - averageTwo);
+        for (int i = 0; i < size; i++) {
+            sum += (tailOne.get(i) - averageOne) * (tailTwo.get(i) - averageTwo);
         }
 
         return sum/(end - start - 1);

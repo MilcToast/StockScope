@@ -7,6 +7,7 @@ import java.net.http.*;
 import java.util.*;
 
 public class StockFetcher {
+
     public List<StockData> fetch(int maxDays, String symbol, String apikey) {
 
         String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
@@ -42,18 +43,19 @@ public class StockFetcher {
             }
 
             // Data for Each Day
+            List<String> dates = new ArrayList<>(timeSeries.keySet());
+            dates.sort(Comparator.reverseOrder());
+
             List<StockData> entries = new ArrayList<>();
 
             int count = 0;
-            for (Map.Entry<String, JsonElement> entry : timeSeries.entrySet()) {
+            for (String date : dates) {
                 if (count++ >= maxDays) break;
 
-                String timestamp = entry.getKey();
-                JsonObject data = entry.getValue().getAsJsonObject();
-
+                JsonObject data = timeSeries.getAsJsonObject(date);
                 double close = data.get("4. close").getAsDouble();
 
-                entries.add(new StockData(timestamp, close));
+                entries.add(new StockData(date, close));
             }
 
             entries.sort(Comparator.comparing(StockData::getTimestamp));
@@ -66,10 +68,6 @@ public class StockFetcher {
         return null;
     }
 
-    public void printClose(List<StockData> entries) {
-        for (StockData e : entries) {
-                    System.out.println(e);
-                }
-    }
+
 
 }
